@@ -6,8 +6,8 @@
 * reset - 堆疊清空
 * clk - 時脈
 * method - 
-    * 1 - push
-    * 0 - pop
+    * `1'b1` - push
+    * `1'b0` - pop
 * in_valid
 * out_valid
 
