@@ -14,3 +14,16 @@
 測資是 `stack_bench.v`
 
 ## alu
+
+### alu( CLK, reset, in_valid, A, B, op, out );
+* CLK       - 無用
+* reset     - 可省
+* in_valid  - 顧名思義
+
+##### 運算式 A @ B
+* A         - A
+* B         - B
+* op        - operator @
+* out       - output
+
+###### there is not out_valid
