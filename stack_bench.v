@@ -2,10 +2,10 @@
 
 module stack_bench;
 
-    reg     [3:0] in;
-    reg     CLK ,reset, in_valid, method;
-    wire    [3:0] out;
-    wire    out_valid;
+    reg     [15:0] in;
+    reg     CLK ,reset, iv, op;
+    wire    [15:0] out;
+    wire    ov;
     
     parameter   CYCLE               = 10;
     always      #(CYCLE/2.0) CLK    = ~CLK;
@@ -18,13 +18,13 @@ module stack_bench;
         .out(out),
         .reset(reset),
         .clk(CLK),
-        .method(method),
-        .in_valid(in_valid),
-        .out_valid(out_valid)
+        .op(op),
+        .iv(iv),
+        .ov(ov)
     );
     
     always @ (negedge CLK) begin
-        if (out_valid) begin
+        if (ov) begin
             $display("==========================================");
             $display(out);
             $display("==========================================");
@@ -37,7 +37,7 @@ module stack_bench;
                 
         CLK         = 0;
         reset       = 0;
-        in_valid    = 0;
+        iv    = 0;
         
         //reset
         #(2*CYCLE);
@@ -47,8 +47,8 @@ module stack_bench;
             reset = 0;   
                 
         @(negedge CLK); 
-            method = 0;
-            in_valid = 1;            
+            op = 0;
+            iv = 1;            
             in = 1;       
             
         @(negedge CLK);               
@@ -69,7 +69,7 @@ module stack_bench;
             in = 2;
             
         @(negedge CLK); 
-            method = 1;
+            op = 1;
             
         @(negedge CLK);
         @(negedge CLK);            
@@ -82,8 +82,8 @@ module stack_bench;
             
         @(negedge CLK); 
         
-            method = 0;
-            in_valid = 0;
+            op = 0;
+            iv = 0;
             in = 0;
             
         

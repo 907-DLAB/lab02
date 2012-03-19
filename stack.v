@@ -1,11 +1,11 @@
 `timescale 1ns / 1ps
 
-module stack(clk, method, in, out, reset, in_valid, out_valid);
+module stack(clk, op, in, out, reset, iv, ov);
 
     input   [15:0] in;
-    input   in_valid, reset, clk, method;
+    input   iv, reset, clk, op;
     output reg [15:0] out;
-    output reg out_valid;
+    output reg ov;
 
     reg [159:0] stack;
     
@@ -17,15 +17,15 @@ module stack(clk, method, in, out, reset, in_valid, out_valid);
     
     
     
-    always @ (negedge clk or method) begin
+    always @ (negedge clk or op) begin
         
-        // out_valid reset to 0        
-        out_valid = 0;    
+        // ov reset to 0        
+        ov = 0;    
         
         
-        if (in_valid) begin // in_valid
+        if (iv) begin // iv
         
-            case (method)
+            case (op)
             
                 0   : begin                     // push
                     $display("push %d", in);
@@ -33,7 +33,7 @@ module stack(clk, method, in, out, reset, in_valid, out_valid);
                 end
                 
                 1   : begin                     // pop
-                    out_valid = 1;
+                    ov = 1;
                     out = stack[15:0];
                     $display("pop %d", out);
                     stack = { 0, stack[159:16] };

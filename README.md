@@ -1,8 +1,8 @@
 
 ## stack
 
-* in - 15 bit 輸入
-* out - 15 bit 輸出
+* in - 16 bit 輸入
+* out - 16 bit 輸出
 * reset - 堆疊清空
 * clk - 時脈
 * method - 
