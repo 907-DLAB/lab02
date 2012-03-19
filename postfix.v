@@ -1,62 +1,58 @@
 `timescale 1ns / 1ps
 
-module postfix(CLK, OP_MODE, IN, OUT, RESET, IN_VALID, OUT_VALID, st_ov);
+module postfix(CLK, OP_MODE, IN, OUT, RESET, IN_VALID, OUT_VALID);
 
     input   [3:0] IN;
     input   IN_VALID, RESET, CLK, OP_MODE;
     output reg [15:0] OUT;
-    output OUT_VALID;
-    
-    // stack
-    reg [15:0] st_in;
-    reg st_iv, st_op;
-    output st_ov;
-    wire [15:0] st_out;
-    
-    stack st (
-        .in(st_in),
-        .out(st_out),
-        .reset(RESET),
-        .clk(CLK),
-        .op(st_op),
-        .iv(st_iv),
-        .ov(st_ov)
-    );
+    output reg OUT_VALID;    
+    reg [15:0] A, B, T;    
+    reg [159:0] stack;
     
     
     // reset
-    always @ (posedge RESET) begin 
-        $display("reset");
+    always @ (posedge RESET) begin
+        stack = 0;
+        OUT_VALID = 0;
+        $display(stack);
     end
     
-    always @ (st_ov) begin 
-        $display("stack out!");
-        $display(st_out);
-    end
-    
-    always @ (negedge CLK) begin 
-    
-    
-        st_iv <= IN_VALID;
-    
-        if (IN_VALID) begin
-            
-            if (OP_MODE) begin
-                $display("OP");
-                st_op <= 1;
-                
-                
-            end else begin
-            
-                st_in = { 0, IN };
-                st_op <= 0;
-                
+    // reset
+    always @ (negedge IN_VALID) begin
+        if (OUT_VALID != 1) begin
+            OUT_VALID = 1;
+            @ (negedge CLK) begin
+                OUT_VALID = 0;
             end
-            
-        end 
+        end
+    end    
     
-           
-    
+    always @ (negedge CLK) begin
+        if (IN_VALID) begin
+            if (OP_MODE) begin  
+                A = stack[31:16];
+                B = stack[15:0];                
+                case (IN)
+				    4'b0001:
+				    begin
+					    T = A + B;
+				    end
+				    4'b0010:
+				    begin
+					    T = A - B;
+				    end
+				    4'b0100:
+				    begin
+					    T = A * B;
+				    end
+				endcase				    
+                stack = { 0, stack[159:32], T };
+                OUT = T;                
+            end else begin            
+                stack = { stack[143:0], 12'b000000000000,  IN };
+            end
+        end
     end
+    
    
 endmodule

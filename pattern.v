@@ -6,7 +6,7 @@ module pattern;
 	reg  [3:0]  IN;
 
 	// Outputs
-	wire        OUT_VALID, st_ov;
+	wire        OUT_VALID;
 	wire [15:0] OUT;
 	reg  [15:0] YOUR_ANSWER;
 	
@@ -25,8 +25,7 @@ module pattern;
        .OP_MODE(OP_MODE),
        .IN(IN),
        .OUT_VALID(OUT_VALID),
-       .OUT(OUT),
-       .st_ov(st_ov)
+       .OUT(OUT)
 	);
 
 initial 
@@ -185,6 +184,8 @@ end
 //---------------------------------------------------------------------
 // CHECK CORRECT PATTERN WITH DESIGN OUTPUT PATTERN           
 //---------------------------------------------------------------------
+
+
 always@(negedge CLK)
 begin
 
