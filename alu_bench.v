@@ -1,31 +1,14 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date:    17:22:50 03/18/2012 
-// Design Name: 
-// Module Name:    pattern 
-// Project Name: 
-// Target Devices: 
-// Tool versions: 
-// Description: 
-//
-// Dependencies: 
-//
-// Revision: 
-// Revision 0.01 - File Created
-// Additional Comments: 
-//
-//////////////////////////////////////////////////////////////////////////////////
-module pattern;
+
+module alu_bench;
 
 	// Inputs
-	reg         CLK, RESET, IN_VALID;
+	reg         CLK, IN_VALID;
 	reg  [3:0]  A, B, OP_MODE;  //OP_MODE = operator
 
 	// Outputs
 	wire [15:0] OUT;
+	wire OUT_VALID;
 	
 	parameter CYCLE = 10;
 	always #(CYCLE/2.0) CLK = ~CLK;
@@ -33,8 +16,8 @@ module pattern;
 	// Instantiate the Unit Under Test (UUT)
 	alu uut (
 		.CLK(CLK),
-		.reset(RESET),
 		.in_valid(IN_VALID),
+		.out_valid(OUT_VALID),
 		.A(A), 
 		.B(B), 
 		.op(OP_MODE),
@@ -46,18 +29,10 @@ begin
 	
   //initial
   CLK      = 0;
-  RESET    = 0;
   IN_VALID = 0;
   OP_MODE  = 0;
   A        = 'bx;
   B        = 'bx;
-  
-  //reset
-  #(2*CYCLE);     
-  @(negedge CLK);
-  RESET = 1;
-  @(negedge CLK);
-  RESET = 0;
   
   
   #(1*CYCLE);

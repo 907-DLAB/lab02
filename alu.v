@@ -1,19 +1,18 @@
 `timescale 1ns / 1ps
 
-module alu( CLK, reset, in_valid, A, B, op, out );
+module alu( CLK, in_valid, out_valid, A, B, op, out );
    
-	input CLK, reset, in_valid;
-   input [3:0] A, B;
-   input [3:0] op;
-   output reg [15:0] out;
+    input CLK, in_valid;
+    input [3:0] A, B;
+    input [3:0] op;
+    output reg [15:0] out;
+    output reg out_valid;
 	
-	always @ (posedge reset)
-	begin
-		out = 0;
-	end
 	
 	always @ ( in_valid or op )
 	begin
+		out_valid = 0;
+	    
 		if(in_valid)
 		begin
 			case(op)
@@ -30,6 +29,7 @@ module alu( CLK, reset, in_valid, A, B, op, out );
 					out = A*B;
 				end
 			endcase
+			out_valid = 1;
 		end
 	end
 endmodule
